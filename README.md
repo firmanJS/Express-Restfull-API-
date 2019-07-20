@@ -14,7 +14,7 @@ run npm ./bin/www
 server runing in port 6500 ----> cek in folder bin/www
 in browser http://localhost:6500/
 test in postman put,post,get,delete
-
+set header x-token-api token get with login
 ```
 
 # Technologies

@@ -1,4 +1,4 @@
-# aplikasi-jadwal-adzan-dengan-codeigniter-ajax-angularjs
+# Simple Expressjs RestFullAPi With JWT
 Simple Expressjs RestFullAPi With JWT
 
 # Documentation & Reference

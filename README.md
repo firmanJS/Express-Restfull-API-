@@ -21,7 +21,8 @@ set header x-token-api token get with login
 Nodejs, JWT, Expressjs
 
 # Requirements
-- Perlu Koneksi Internet (Tidak Support offline) <br>
-- PHP 5.0 or Higher 
+- Need internet conection to run npm install <br>
+- Nodejs <br>
+- NPM
 
 

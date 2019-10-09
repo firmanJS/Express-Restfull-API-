@@ -8,6 +8,7 @@ router.get('/', users.index);
 router.get('/getData', users.Getdata);
 router.get('/getDataById/:id', users.GetdataById);
 router.post('/setToken', users.setToken);
+router.get('/logout', users.Logout);
 router.post('/register', users.Register);
 router.put('/UpdateData/:id', users.UpdateData);
 router.delete('/DeleteData', users.DeleteData);

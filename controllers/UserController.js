@@ -1,7 +1,7 @@
 'use strict';
 const passwordHash = require('password-hash'),
-{ tbluser } = require('../models'),
-jwt = require('jsonwebtoken');
+  { tbluser } = require('../models'),
+  jwt = require('jsonwebtoken');
 class UserController {
   
   constructor(name){
@@ -16,6 +16,14 @@ class UserController {
         username:'user',
         password:'user'
       }
+    });
+  }
+
+  Logout(req,res){
+    const token = req.headers['x-token-api'];
+    this.ValidateToken(token);
+    jwt.sign({ token }, 'ExpressRestFullAPIVALIDATE', { expiresIn:'5s' }, (err, token) => {
+      res.json('success logout'+token)
     });
   }
   
@@ -53,12 +61,7 @@ class UserController {
   async Register(req, res) {
     const token = req.headers['x-token-api'],
     input = JSON.parse(JSON.stringify(req.body));
-    jwt.verify(token, 'ExpressRestFullAPI', function (err) {
-      if (err) return res.status(500).send({
-        auth: false,
-        message: 'Failed to authenticate token not match !'
-      });
-    });
+
     if(input.username === undefined || input.password === undefined){
       res.json({msg:'cannot empty !'});
     }
@@ -76,12 +79,7 @@ class UserController {
   
   async Getdata(req,res){
     const token = req.headers['x-token-api'];
-    jwt.verify(token, 'ExpressRestFullAPI', function (err) {
-      if (err) return res.status(500).send({
-        auth: false,
-        message: 'Failed to authenticate token not match !'
-      });
-    });
+    this.ValidateToken(token);
     tbluser.findAll().then((usr) => {
       res.json({status:"token match",data:usr});
     });
@@ -90,12 +88,7 @@ class UserController {
   async GetdataById(req,res){
     const token = req.headers['x-token-api'],
     id = req.params.id;
-    jwt.verify(token, 'ExpressRestFullAPI', function (err) {
-      if (err) return res.status(500).send({
-        auth: false,
-        message: 'Failed to authenticate token not match !'
-      });
-    });
+    this.ValidateToken(token);
     res.json({data:await tbluser.findByPk(id)})
   }
   
@@ -103,12 +96,7 @@ class UserController {
     const token = req.headers['x-token-api'],
     input = JSON.parse(JSON.stringify(req.body)),
     id = req.params.id;
-    jwt.verify(token, 'ExpressRestFullAPI', function (err) {
-      if (err) return res.status(500).send({
-        auth: false,
-        message: 'Failed to authenticate token not match !'
-      });
-    });
+    this.ValidateToken(token);
     if(input.username === undefined || input.password === undefined){
       res.json({msg:'cannot empty !'});
     }
@@ -117,12 +105,6 @@ class UserController {
       username: input.username,
       password: passwordToSave
     };
-    jwt.verify(token, 'ExpressRestFullAPI', function (err) {
-      if (err) return res.status(500).send({
-        auth: false,
-        message: 'Failed to authenticate token not match !'
-      });
-    });
     tbluser.findByPk(id).then((Users) => {
       Users.update(data);
       res.json({msg:'success updated'});
@@ -135,17 +117,21 @@ class UserController {
     const token = req.headers['x-token-api'],
     input = JSON.parse(JSON.stringify(req.body)),
     id = input.id;
-    jwt.verify(token, 'ExpressRestFullAPI', function (err) {
-      if (err) return res.status(500).send({
-        auth: false,
-        message: 'Failed to authenticate token not match !'
-      });
-    });
+    this.ValidateToken(token);
     tbluser.findByPk(id).then((row) => {
       row.destroy();
       res.json({message: 'sukses terhapus !'});
     }).catch((err) => {
       res.json({message: err.message});
+    });
+  }
+
+  ValidateToken(token){
+    jwt.verify(token, 'ExpressRestFullAPI', function (err) {
+      if (err) return res.status(500).send({
+        auth: false,
+        message: 'Failed to authenticate token not match !'
+      });
     });
   }
   

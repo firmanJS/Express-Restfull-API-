@@ -1,28 +1,9 @@
-# Simple Expressjs RestFullAPi With JWT
-Simple Expressjs RestFullAPi With JWT
-
-# Documentation & Reference
-https://www.npmjs.com/package/jsonwebtoken <br>
-http://docs.sequelizejs.com/manual/getting-started.html <br>
-https://expressjs.com/
-
 ## How To Use
 
 ```
 run npm install 
+run npx sequelize-cli db:migrate ----> running migration
 run npm ./bin/www
 server runing in port 6500 ----> cek in folder bin/www
-in browser http://localhost:6500/
-test in postman put,post,get,delete
-set header x-token-api token get with login
 ```
-
-# Technologies
-Nodejs, JWT, Expressjs
-
-# Requirements
-- Need internet conection to run npm install <br>
-- Nodejs <br>
-- NPM
-
 

@@ -1,7 +1,7 @@
 'use strict';
 const passwordHash = require('password-hash'),
   { tbluser } = require('../models'),
-  jwt = require('jsonwebtoken');
+jwt = require('jsonwebtoken');
 class UserController {
   
   // constructor(name){
@@ -18,9 +18,8 @@ class UserController {
       }
     });
   }
-
+  
   Logout(req,res){
-    ValidateToken();
     jwt.sign({ token }, 'ExpressRestFullAPIVALIDATE', { expiresIn:'5s' }, (err, token) => {
       res.json('success logout'+token)
     });
@@ -59,7 +58,7 @@ class UserController {
   
   async Register(req, res) {
     const input = JSON.parse(JSON.stringify(req.body));
-
+    
     if(input.username === undefined || input.password === undefined){
       res.json({msg:'cannot empty !'});
     }
@@ -76,8 +75,6 @@ class UserController {
   }
   
   async Getdata(req,res){
-    const token = req.headers['x-token-api'];
-    ValidateToken();
     tbluser.findAll().then((usr) => {
       res.json({status:"token match",data:usr});
     });
@@ -85,14 +82,12 @@ class UserController {
   
   async GetdataById(req,res){
     const id = req.params.id;
-    ValidateToken();
     res.json({data:await tbluser.findByPk(id)})
   }
   
   async UpdateData(req,res){
     const input = JSON.parse(JSON.stringify(req.body)),
     id = req.params.id;
-    ValidateToken();
     if(input.username === undefined || input.password === undefined){
       res.json({msg:'cannot empty !'});
     }
@@ -112,7 +107,6 @@ class UserController {
   async DeleteData(req,res){
     const input = JSON.parse(JSON.stringify(req.body)),
     id = input.id;
-    ValidateToken();
     tbluser.findByPk(id).then((row) => {
       row.destroy();
       res.json({message: 'sukses terhapus !'});
@@ -122,14 +116,5 @@ class UserController {
   }
   
 }
-function ValidateToken(req,res,next){
-  const token = req.headers['x-token-api'];
-  jwt.verify(token, 'ExpressRestFullAPI', (err) => {
-    if (err) return res.status(500).send({
-      auth: false,
-      message: 'Failed to authenticate token not match !'
-    });
-    next();
-  });
-}
+
 module.exports = UserController

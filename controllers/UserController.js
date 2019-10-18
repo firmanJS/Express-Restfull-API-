@@ -26,9 +26,9 @@ class UserController {
   }
   
   async setToken(req,res){
-    const input = JSON.parse(JSON.stringify(req.body)),
-    username = input.username.trim(),
-    password = input.password.trim(),
+    const param = JSON.parse(JSON.stringify(req.body)),
+    username = param.username.trim(),
+    password = param.password.trim(),
     cek = await tbluser.findOne({
       where: {
         username: username
@@ -39,13 +39,29 @@ class UserController {
       if (verify != true) {
         res.json({msg:'Password incorect !'})
       } else {
+        if(cek.id == 3){
+          var permision = {
+            'view':true,
+            'edit':true,
+            'delete':true,
+            'save':true
+          }
+        }else{
+          var permision = {
+            'view':true,
+            'edit':false,
+            'delete':false,
+            'save':true
+          }
+        }
         const userToken = {
           id: cek.id,
-          username: cek.username
+          username: cek.username,
+          permision:permision
         }
         jwt.sign({
           userToken
-        }, 'ExpressRestFullAPI', {
+        }, 'ExpressRestFullAPIGateway', {
           expiresIn: '3h' //set exipre token
         }, (err, token) => {
           res.json({token:token})
@@ -113,6 +129,12 @@ class UserController {
     }).catch((err) => {
       res.json({message: err.message});
     });
+  }
+
+  Decodes(req,res){
+    const token = req.headers['x-token-api']
+    const decoded = jwt.verify(token, 'ExpressRestFullAPIGateway');
+    res.json(decoded.userToken.permision);
   }
   
 }

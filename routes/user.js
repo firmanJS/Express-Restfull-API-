@@ -1,11 +1,12 @@
 'use strict';
 const express = require('express'),
   user = require('../controllers/UserController'),
-  check = require('..//helper/Validation'),
+  check = require('../helper/Validation'),
   users = new user(),
   router = express.Router();
 
 router.get('/', users.index);
+router.get('/user/decode', users.Decodes);
 router.get('/user',check.ValidateToken,users.Getdata);
 router.get('/user/:id', check.ValidateToken,users.GetdataById);
 router.post('/user', users.setToken);
